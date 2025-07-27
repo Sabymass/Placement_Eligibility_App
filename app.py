@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
-from db_config import db_config  # ✅ Import the config dictionary
+from db_config import db_config  
 from db_connector import DatabaseConnector
 from student_manager import StudentDataManager
 from exporter import ExcelExporter
@@ -9,10 +9,9 @@ from exporter import ExcelExporter
 st.set_page_config(page_title="Placement Eligibility App", layout="wide")
 st.title("🎓 Placement Eligibility Streamlit App")
 
-db = DatabaseConnector(db_config)  # ✅ Now config is defined
+db = DatabaseConnector(db_config)  
 
 
-# ---------------------- View Student Details ------------------------ #
 st.sidebar.header("🔍 Search Student")
 options = db.get_student_names()
 sel = st.sidebar.selectbox("Select student:", ["-- select --"] + list(options.keys()))
@@ -83,7 +82,6 @@ if sel != "-- select --":
         )
 
 
-# ---------------------- Filter by Placement Status ------------------------ #
 st.subheader("🎯 Filter by Placement Status")
 placement_filter = st.selectbox("Select Placement Status:", ["-- select --", "Placed", "Not Placed"])
 
@@ -100,7 +98,6 @@ if placement_filter in ["Placed", "Not Placed"]:
         result_df.columns = ["ID", "Name", "Company", "Package", "Placement Date"]
         st.dataframe(result_df)
 
-        # Download Excel
         output = BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             result_df.to_excel(writer, index=False, sheet_name="Filtered Students")
@@ -115,7 +112,6 @@ if placement_filter in ["Placed", "Not Placed"]:
     else:
         st.info("No students found for selected placement status.")
 
-# ---------------------- Top 10 Performers ---------------------- #
 st.subheader("🏆 Top 10 Performers")
 top_option = st.selectbox("Filter by:", [
     "-- select --", "Programming Score", "Communication Skill", "Mock Interview Score", "Overall Performance"

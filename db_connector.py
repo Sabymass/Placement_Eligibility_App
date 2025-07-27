@@ -1,4 +1,3 @@
-# db_connector.py
 import mysql.connector
 import pandas as pd
 
